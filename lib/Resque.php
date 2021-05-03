@@ -95,6 +95,11 @@ class Resque
 		// This is a workaround for issues phpredis has.
 		self::$redis = null;
 
+		//helper function to destory other tcp connection before fork
+		if (function_exists("fork_prepare")) {
+	            fork_prepare();
+        	}
+		
 		$pid = pcntl_fork();
 		if($pid === -1) {
 			throw new RuntimeException('Unable to fork child worker.');
